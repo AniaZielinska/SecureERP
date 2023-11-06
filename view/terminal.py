@@ -30,14 +30,18 @@ def print_general_results(result, label):
 # |   0    |  Bazooka   | portable |
 # |--------|------------|----------|
 # |   1    | Sidewinder | missile  |
-# \-----------------------------------/
+# \--------------------------------/
 def print_table(table):
-    """Prints tabular data like above.
-
-    Args:
-        table: list of lists - the table to print out
-    """
-    pass
+    column_widths = [max(len(str(cell)) for row in table for cell in row)]
+    total_width = sum(column_widths) + 4 + len(table[0]) - 1
+    print("/" + "-" * (total_width - 2) + "\\")
+    header = table[0]
+    # ToDo coś z indeksami z linijki 40 i 43, muszą być zależne od długości listy a nie na stałe 0, 1, 2
+    print(f"| {header[0]:^{column_widths[0]}} | {header[1]:^{column_widths[1]}} | {header[2]:^{column_widths[2]}} |")
+    print("|" + "-" * (total_width - 2) + "|")
+    for row in table[1:]:
+        print(f"| {row[0]:^{column_widths[0]}} | {row[1]:^{column_widths[1]}} | {row[2]:^{column_widths[2]}} |")
+    print("\\" + "-" * (total_width - 2) + "/")
 
 
 def get_input(label):

@@ -3,7 +3,10 @@ from view import terminal as view
 
 
 def list_transactions():
-    view.print_error_message("Not implemented yet.")
+    transactions = sales.get_table_from_file()
+    if transactions is None:
+        view.print_error_message("File is empty.")
+    view.print_table(transactions)
 
 
 def add_transaction():

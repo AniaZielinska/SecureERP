@@ -12,3 +12,10 @@ from model import data_manager, util
 
 DATAFILE = "model/sales/sales.csv"
 HEADERS = ["Id", "Customer", "Product", "Price", "Date"]
+
+
+def get_table_from_file():
+    table = data_manager.read_table_from_file(DATAFILE)
+    if not table:
+        return None
+    return table
