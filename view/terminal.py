@@ -7,12 +7,7 @@ def print_menu(title, list_options):
 
 
 def print_message(message):
-    """Prints a single message to the terminal.
-
-    Args:
-        message: str - the message
-    """
-    pass
+    print(f"\n{message}")
 
 
 def print_general_results(result, label):
@@ -43,15 +38,20 @@ def print_table(table):
             max_column_widths[i] = column_widths[i] if column_widths[i] > max_column_widths[i] else max_column_widths[i]
 
     # Calculate the total width of the table based on the widest column
-    total_width = sum(max_column_widths) + len(table[0]) * 3  # 3 for padding and separator
+    total_width = sum(max_column_widths) + len(table[0]) * 3 + 1
 
     # Print the top border
     print("/" + "-" * (total_width - 2) + "\\")
 
     # Print the data rows
+    number_of_rows = len(table)
     for row in table:
+        number_of_rows -= 1
         row_format = "| " + " | ".join(f"{row[i]:^{max_column_widths[i]}}" for i in range(len(row))) + " |"
         print(row_format)
+        if number_of_rows != 0:
+            separator = "| " + " | ".join("-" * (max_column_widths[i]) for i in range(len(row))) + " |"
+            print(separator)
 
     # Print the bottom border
     print("\\" + "-" * (total_width - 2) + "/")
@@ -63,12 +63,11 @@ def get_input(label):
 
 
 def get_inputs(labels):
-    """Gets a list of string inputs from the user.
-
-    Args:
-        labels: list - the list of the labels to be displayed before each prompt
-    """
-    pass
+    user_inputs = []
+    for i in range(len(labels)):
+        user_input = input(f"{labels[i]}: ")
+        user_inputs.append(user_input)
+    return user_inputs
 
 
 def print_error_message(message):
