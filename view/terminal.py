@@ -32,15 +32,28 @@ def print_general_results(result, label):
 # |   1    | Sidewinder | missile  |
 # \--------------------------------/
 def print_table(table):
-    column_widths = [max(len(str(cell)) for row in table for cell in row)]
-    total_width = sum(column_widths) + 4 + len(table[0]) - 1
+    # Calculate the maximum width for each column
+    max_column_widths = []
+    for row in table:
+        column_widths = []
+        for cell in row:
+            column_widths.append(len(str(cell)))
+        max_column_widths = column_widths if row == table[0] else max_column_widths
+        for i in range(len(column_widths)):
+            max_column_widths[i] = column_widths[i] if column_widths[i] > max_column_widths[i] else max_column_widths[i]
+
+    # Calculate the total width of the table based on the widest column
+    total_width = sum(max_column_widths) + len(table[0]) * 3  # 3 for padding and separator
+
+    # Print the top border
     print("/" + "-" * (total_width - 2) + "\\")
-    header = table[0]
-    # ToDo coś z indeksami z linijki 40 i 43, muszą być zależne od długości listy a nie na stałe 0, 1, 2
-    print(f"| {header[0]:^{column_widths[0]}} | {header[1]:^{column_widths[1]}} | {header[2]:^{column_widths[2]}} |")
-    print("|" + "-" * (total_width - 2) + "|")
-    for row in table[1:]:
-        print(f"| {row[0]:^{column_widths[0]}} | {row[1]:^{column_widths[1]}} | {row[2]:^{column_widths[2]}} |")
+
+    # Print the data rows
+    for row in table:
+        row_format = "| " + " | ".join(f"{row[i]:^{max_column_widths[i]}}" for i in range(len(row))) + " |"
+        print(row_format)
+
+    # Print the bottom border
     print("\\" + "-" * (total_width - 2) + "/")
 
 
