@@ -11,7 +11,7 @@ def list_transactions():
 
 
 def add_transaction():
-    labels = sales.give_headers()
+    labels = sales.HEADERS[1:]
     user_inputs = view.get_inputs(labels)
     sales.adding_transaction(user_inputs)
 
