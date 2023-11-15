@@ -7,16 +7,29 @@ def print_menu(title, list_options):
 
 
 def print_message(message):
-    print(f"\n{message}")
+    print(f"\n{message}\n")
 
 
 def print_general_results(result, label):
+    if isinstance(result, (int, float)):
+        if isinstance(result, float):
+            result = format(result, ".2f")
+        print(f"\n{label}: {result}")
+    elif isinstance(result, (list, tuple)):
+        result = "; ".join(str(result[i]) for i in range(len(result)))
+        print(f"\n{label}:\n{result}")
+    elif isinstance(result, dict):
+        template_string = "{}: {{}}"
+        keys = map(template_string.format, result)
+        dictionary = "; ".join(keys).format(*result.values())
+        print(f"\n{label}")
+        print(dictionary)
+
     """Prints out any type of non-tabular data.
     It should print numbers (like "@label: @value", floats with 2 digits after the decimal),
     lists/tuples (like "@label: \n  @item1; @item2"), and dictionaries
     (like "@label \n  @key1: @value1; @key2: @value2")
     """
-    pass
 
 
 # /--------------------------------\
