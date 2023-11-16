@@ -6,17 +6,20 @@ from datetime import datetime
 def list_employees():
     employees=hr.data_manager.read_table_from_file(hr.DATAFILE)
     view.print_table(employees)
+def check_name(name):
+        if not name.isalpha() or len(name)>25 or len(name)==0:
+            view.print_message("The name cannot contain numbers and cannot be longer then 25 chars. Please provide a name.")
+            return True
+        else:
+            return False
 
 def add_employee():
     employees=hr.data_manager.read_table_from_file(hr.DATAFILE)
     name=""
-    while True:
+    while not name:
         name = view.get_input("Name")
-        if not name.isalpha() or len(name)>25:
-            view.print_message("The name cannot contain numbers and cannot be longer then 25 chars. Please provide a name.\n")
-            continue
-        else:
-            break
+        if check_name(name):
+            name=""
         
     birth_date = ""
     while not birth_date:
@@ -24,19 +27,21 @@ def add_employee():
         try:
             birth_date = datetime.strptime(birth_date, "%Y-%m-%d").strftime("%Y-%m-%d")
         except (ValueError, TypeError):
-            view.print_message("Please provide a valid birth date (YYYY-MM-DD).\n")
+            view.print_message("Please provide a valid birth date (YYYY-MM-DD).")
             birth_date = ""
     department=""
-    while 0<len(department)>25:     
-        department= view.get_input("Department")
-        view.print_message("Department name cannot be longer than 25 chars. Please provide a valid department name.")
+    while not department:
+        department=view.get_input("Department")
+        if 0==len(department)or len(department)>25:     
+            view.print_message("Department name cannot be longer than 25 chars. Please provide a valid department name.")
+            department=""
     clearance=""
     while not clearance:
         clearance = view.get_input("Clearance")
         if clearance in {"1","2","3","4","5","6","7"}:
             break
         else:
-            view.print_message("Please provide a numeric clearance level (1-7).\n")
+            view.print_message("Please provide a numeric clearance level (1-7).")
             clearance=""
     while True:
         new_employee = {
@@ -53,7 +58,10 @@ def add_employee():
             hr.data_manager.write_table_to_file(hr.DATAFILE, employees)
             break
     view.print_message("Employee added successfully.")
-
+def update_employee_message(employees, id, i):
+    hr.data_manager.write_table_to_file(hr.DATAFILE, employees)
+    view.print_general_results(i, "Employee details")
+    view.print_message(f"The employee {id} details have been successfully updated.")
 def update_employee():
     employees=hr.data_manager.read_table_from_file(hr.DATAFILE)
     id=view.get_input("Enter ID of the employee to update")
@@ -70,23 +78,33 @@ def update_employee():
                     case "0":
                         return
                     case "1":
-                        name=view.get_input("New name")
-                        i[1]=name
-                        hr.data_manager.write_table_to_file(hr.DATAFILE, employees)
-                        view.print_general_results(i, "Employee etails")
-                        view.print_message(f"The employee {id} details have been successfully updated.")
+                        new_name=""
+                        while not new_name:
+                            new_name = view.get_input("New name")
+                            if check_name(new_name):
+                                new_name=""
+                        i[1]=new_name
+                        update_employee_message(employees, id, i)
                     case "2":
-                        depertment=view.get_input("New depertment")
-                        i[3]=depertment
-                        hr.data_manager.write_table_to_file(hr.DATAFILE, employees)
-                        view.print_general_results(i, "Employee etails")
-                        view.print_message(f"The employee {id} details have been successfully updated.")
+                        new_department=""
+                        while not new_department:
+                            new_department=view.get_input("New depertment")
+                            if 0==len(new_department)or len(new_department)>25:     
+                                view.print_message("Department name cannot be longer than 25 chars. Please provide a valid department name.")
+                                new_department=""
+                        i[3]=new_department
+                        update_employee_message(employees, id, i)
                     case "3":
-                        clearance=view.get_input("New clearance")
-                        i[4]=clearance
-                        hr.data_manager.write_table_to_file(hr.DATAFILE, employees)
-                        view.print_general_results(i, "Employee etails")
-                        view.print_message(f"The employee {id} details have been successfully updated.")
+                        new_clearance=""
+                        while not new_clearance:
+                            new_clearance = view.get_input("New clearance")
+                            if new_clearance in {"1","2","3","4","5","6","7"}:
+                                break
+                            else:
+                                view.print_message("Please provide a numeric clearance level (1-7).")
+                                new_clearance=""
+                        i[4]=new_clearance
+                        update_employee_message(employees, id, i)
                     case _:
                         view.print_error_message("There is no such option.")
             StopIteration
