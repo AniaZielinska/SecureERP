@@ -5,6 +5,7 @@ from datetime import datetime
 
 def list_employees():
     employees=hr.data_manager.read_table_from_file(hr.DATAFILE)
+    employees.insert(0, hr.HEADERS)
     view.print_table(employees)
 def check_name(name):
         if not name.isalpha() or len(name)>25 or len(name)==0:
