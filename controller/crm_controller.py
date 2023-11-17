@@ -30,7 +30,7 @@ def add_customer():
     customers.append(new_customer)
     crm.data_manager.write_table_to_file(crm.DATAFILE, customers)
     view.print_message(f"\nUser added successfully with ID: {new_customer_id}\n")
-    view.print_table(customers)
+    list_customers()
 
 
 def update_customer():
@@ -85,7 +85,7 @@ def delete_customer():
             customers.remove(customer_to_delete)
             crm.data_manager.write_table_to_file(crm.DATAFILE, customers)
             view.print_message(f"Customer with ID {customer_id_to_delete} deleted successfully.")
-            view.print_table(customers)
+            list_customers()
             break
         else:
             view.print_error_message(f"There's no customer with ID: {customer_id_to_delete}")
