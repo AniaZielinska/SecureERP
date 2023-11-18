@@ -15,7 +15,7 @@ HEADERS = ["id", "name", "email", "subscribed"]
 
 def is_valid_name(name):
     contains_non_space = any(char.isalpha() for char in name)
-    return contains_non_space and (all(char.isalpha() or char.isspace() for char in name) or len(name) > 25)
+    return contains_non_space and all(char.isalpha() or char.isspace() for char in name) and len(name) <= 25
 
 def is_valid_email(email):
     return '@' in email and '.' in email.split('@')[-1]
